@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public LayerMask ground;
     Rigidbody2D rigid2D;
     Animator animator;
-    float jumpForce = 500.0f;
+    float jumpForce = 430.0f;
     float walkForce = 20.0f;
     float maxSpeed = 4.0f;
+    bool grounded = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +22,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && rigid2D.velocity.y == 0)
+        grounded = Physics2D.Linecast(transform.position,
+                                    transform.position - transform.up * 1f,
+                                    ground);
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             rigid2D.AddForce(transform.up * jumpForce);
         }
@@ -37,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
         if (key != 0)
         {
-            transform.localScale = new Vector3(key, 1, 1);
+            transform.localScale = new Vector3(key*0.8f, 0.8f, 0.8f);
         }
         animator.speed = nowSpeed / 2.0f;
     }
