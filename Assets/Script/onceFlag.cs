@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class flag : MonoBehaviour
+public class onceFlag : MonoBehaviour
 {
     public int number;
     GameManager GM;
@@ -12,7 +12,7 @@ public class flag : MonoBehaviour
     void Start()
     {
         GM = GameObject.Find("GameManager").GetComponent<GameManager>();
-        
+
     }
 
     // Update is called once per frame
@@ -20,19 +20,14 @@ public class flag : MonoBehaviour
     {
     }
 
-    IEnumerator Coroutine(float sec)
-    {
-        onF = 1;
-        yield return new WaitForSeconds(sec);
-        onF = 0;
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player" && onF == 0) 
+        if (other.gameObject.tag == "Player" && onF == 0)
         {
+            other.gameObject.GetComponent<PlayerController>().Stop(1.5f);
             GM.Rotate(number);
-            StartCoroutine("Coroutine", 1.5f);
+            onF = 1;
+            transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color = Color.black;
         }
     }
 }

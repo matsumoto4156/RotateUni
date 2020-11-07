@@ -7,8 +7,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask ground;
     Rigidbody2D rigid2D;
     Animator animator;
-    float jumpForce = 430.0f;
-    float walkForce = 20.0f;
+    float jumpForce = 460.0f;
+    float walkForce = 10.0f;
     float maxSpeed = 4.0f;
     bool grounded = false;
 
@@ -47,5 +47,24 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(key*0.8f, 0.8f, 0.8f);
         }
         animator.speed = nowSpeed / 2.0f;
+    }
+
+    IEnumerator ToKin(float sec)
+    {
+        yield return new WaitForSeconds(0.1f);
+        this.gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        StartCoroutine("ToDyn", sec);
+    }
+
+    IEnumerator ToDyn(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+    }
+
+    public void Stop(float sec)
+    {
+        StartCoroutine("ToKin", sec);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("GameScene");
+        }
 
     }
 
@@ -24,7 +29,10 @@ public class GameManager : MonoBehaviour
         foreach (GameObject st
             in GameObject.FindGameObjectsWithTag(Stage[num - 1]))
         {
-            st.GetComponent<move>().Rotate(num);
+            if (st.GetComponent<move>() != null)
+                st.GetComponent<move>().Rotate(num);
+            else if (st.GetComponent<attachThings>() != null)
+                st.GetComponent<attachThings>().Fall(1.0f);
         }
     }
 }
